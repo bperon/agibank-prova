@@ -1,32 +1,32 @@
-package br.com.agibank.service;
+package br.com.agibank.executor;
 
 import static br.com.agibank.constants.Constants.DAT_FILE_EXTENSION;
 import static java.lang.String.format;
 
 import br.com.agibank.config.SalesProjectConfiguration;
 import br.com.agibank.exception.SalesReportException;
+import br.com.agibank.service.SalesReport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
-public class ReportExecutorService {
-    private static final Logger LOGGER = LogManager.getLogger(ReportExecutorService.class.getName());
+@Component
+public class SalesReportExecutor {
+    private static final Logger LOGGER = LogManager.getLogger(SalesReportExecutor.class.getName());
 
     private SalesProjectConfiguration config;
-    private SalesReport salesReport;
+    private SalesReport salesReportService;
 
-    public ReportExecutorService(final SalesProjectConfiguration config, final SalesReport salesReport) {
+    public SalesReportExecutor(final SalesProjectConfiguration config, final SalesReport salesReportService) {
         this.config = config;
-        this.salesReport = salesReport;
+        this.salesReportService = salesReportService;
     }
 
     public void execute() {
@@ -39,25 +39,18 @@ public class ReportExecutorService {
 
             LOGGER.debug("Total files: {}.", files.size());
             final Path outputFile = config.getOutputFile();
-            salesReport.setFiles(files);
+            salesReportService.setFiles(files);
 
-            writeSalesReportDataToFile(outputFile, salesReport);
+            writeSalesReportDataToFile(outputFile);
             LOGGER.debug("Report created in '{}'",  outputFile);
         } catch (SalesReportException e) {
             LOGGER.error("Error when generating report: {}", e.getMessage());
         }
     }
 
-    private static List<File> listFiles(final Path dirPath) throws IOException {
-        return Files.walk(dirPath)
-                .map(Path::toString)
-                .filter(file -> file.endsWith(DAT_FILE_EXTENSION) && !file.endsWith(".done".concat(DAT_FILE_EXTENSION)))
-                .map(File::new)
-                .collect(Collectors.toList());
-    }
-
     private List<File> getFiles() {
-        List<File> files = Collections.emptyList();
+        List<File> files;
+
         try {
             files = listFiles(config.getInputFolder());
         } catch (IOException e) {
@@ -68,12 +61,20 @@ public class ReportExecutorService {
         return files;
     }
 
-    private void writeSalesReportDataToFile(final Path outputFile, final SalesReport salesReport) {
+    private static List<File> listFiles(final Path dirPath) throws IOException {
+        return Files.walk(dirPath)
+                .map(Path::toString)
+                .filter(file -> file.endsWith(DAT_FILE_EXTENSION) && !file.endsWith(".done".concat(DAT_FILE_EXTENSION)))
+                .map(File::new)
+                .collect(Collectors.toList());
+    }
+
+    private void writeSalesReportDataToFile(final Path outputFile) {
         final List<String> outputLines = new ArrayList<>();
-        outputLines.add(format("Clients count: %d", salesReport.getClientCount()));
-        outputLines.add(format("Salers count: %d", salesReport.getSalerCount()));
-        outputLines.add(format("Most expensive sale ID: %d", salesReport.getMaxSaleId()));
-        outputLines.add(format("Worst salesman: %s", salesReport.getWorstSalesman()));
+        outputLines.add(format("Clients count: %d", salesReportService.getClientCount()));
+        outputLines.add(format("Salers count: %d", salesReportService.getSalerCount()));
+        outputLines.add(format("Most expensive sale ID: %d", salesReportService.getMaxSaleId()));
+        outputLines.add(format("Worst salesman: %s", salesReportService.getWorstSalesman()));
 
         try {
             Files.write(outputFile, outputLines);

@@ -3,7 +3,7 @@ package br.com.agibank.listener;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 import br.com.agibank.config.SalesProjectConfiguration;
-import br.com.agibank.service.ReportExecutorService;
+import br.com.agibank.executor.SalesReportExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -23,11 +23,11 @@ public class FolderListener {
     private static final Logger LOGGER = LogManager.getLogger(FolderListener.class.getName());
 
     private SalesProjectConfiguration config;
-    private ReportExecutorService reportExecutorService;
+    private SalesReportExecutor salesReportExecutor;
 
-    public FolderListener(final SalesProjectConfiguration config, final ReportExecutorService reportExecutorService) {
+    public FolderListener(final SalesProjectConfiguration config, final SalesReportExecutor salesReportExecutor) {
         this.config = config;
-        this.reportExecutorService = reportExecutorService;
+        this.salesReportExecutor = salesReportExecutor;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -45,7 +45,7 @@ public class FolderListener {
 
         LOGGER.debug("Listening for new files in folder '{}'...", inputFolder);
         final ExecutorService executor = Executors.newFixedThreadPool(Integer.parseInt(config.getNumberOfThreads()));
-        executor.execute(() -> reportExecutorService.execute()); // create report if there are any files in HOMEPATH/data/in.
+        executor.execute(() -> salesReportExecutor.execute()); // create report if there are any files in HOMEPATH/data/in.
 
         WatchEvent<Path> eventPath;
         Path child;
@@ -55,7 +55,7 @@ public class FolderListener {
                 child = inputFolder.resolve(eventPath.context());
                 LOGGER.debug("File '{}' added.", child.getFileName());
 
-                executor.execute(() -> reportExecutorService.execute());
+                executor.execute(() -> salesReportExecutor.execute());
 
                 boolean isValid = key.reset();  // needed, otherwise key won't receive any new events.
                 if (!isValid) {

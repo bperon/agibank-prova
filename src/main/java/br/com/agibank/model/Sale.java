@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.List;
 
 public class Sale {
-    private int saleId;
+    private Integer saleId;
     private List<Product> products;
     private String salesmanName;
 
@@ -19,7 +19,7 @@ public class Sale {
         return saleId;
     }
 
-    public void setSaleId(final int saleId) {
+    public void setSaleId(final Integer saleId) {
         this.saleId = saleId;
     }
 

@@ -4,11 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Product {
-    private int itemId;
-    private int quantity;
-    private double price;
+    private Integer itemId;
+    private Integer quantity;
+    private Double price;
 
-    public Product(final int itemId, final int quantity, final double price) {
+    public Product(final Integer itemId, final Integer quantity, final Double price) {
         this.itemId = itemId;
         this.quantity = quantity;
         this.price = price;
@@ -18,7 +18,7 @@ public class Product {
         return itemId;
     }
 
-    public void setItemId(final int itemId) {
+    public void setItemId(final Integer itemId) {
         this.itemId = itemId;
     }
 
@@ -26,7 +26,7 @@ public class Product {
         return quantity;
     }
 
-    public void setQuantity(final int quantity) {
+    public void setQuantity(final Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -34,7 +34,7 @@ public class Product {
         return price;
     }
 
-    public void setPrice(final double price) {
+    public void setPrice(final Double price) {
         this.price = price;
     }
 

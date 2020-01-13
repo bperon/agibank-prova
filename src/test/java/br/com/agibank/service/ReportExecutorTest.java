@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import br.com.agibank.config.SalesProjectConfiguration;
+import br.com.agibank.executor.SalesReportExecutor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ public class ReportExecutorTest {
     private static final String INVALID_FILES_DIR = Paths.get(RESOURCE_DIR, "invalid_files_dir").toString();
 
     @InjectMocks
-    private ReportExecutorService reportExecutorService;
+    private SalesReportExecutor salesReportExecutor;
 
     @Mock
     private SalesProjectConfiguration configuration;
@@ -49,7 +50,7 @@ public class ReportExecutorTest {
         when(salesReport.getWorstSalesman()).thenReturn(randomAlphabetic(10));
         when(configuration.getOutputFile()).thenReturn(outputFilePath);
 
-        reportExecutorService.execute();
+        salesReportExecutor.execute();
 
         verify(salesReport).getClientCount();
         verify(salesReport).getSalerCount();
@@ -62,7 +63,7 @@ public class ReportExecutorTest {
     public void shouldNotProcessReportWithEmptyFolder() {
         when(configuration.getInputFolder()).thenReturn(Paths.get(INVALID_FILES_DIR));
 
-        reportExecutorService.execute();
+        salesReportExecutor.execute();
 
         verifyNoInteractions(salesReport);
         verify(configuration, never()).getOutputFile();
