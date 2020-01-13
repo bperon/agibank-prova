@@ -1,0 +1,45 @@
+buildscript {
+    ext {
+        springBootVersion = '2.2.1.RELEASE'
+        junitVersion = '4.12'
+        apacheCommonsLang3Version = '3.9'
+        apacheLog4J = '2.6.1'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group 'br.com.agibank'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${apacheLog4J}"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${apacheLog4J}"
+    compile "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
+
+    testCompile "junit:junit:${junitVersion}"
+    testCompile group: 'junit', name: 'junit', version: "${junitVersion}"
+    testCompile "org.mockito:mockito-core:3.2.4"
+}
+
+wrapper() {
+    gradleVersion = "6.0.1"
+    distributionUrl = distributionUrl.replace("bin", "all")
+}

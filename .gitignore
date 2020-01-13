@@ -1,0 +1,15 @@
+/build/
+/bin/
+/logs/
+/.idea/
+/out/
+
+.DS_Store
+.gradle
+.settings
+.classpath
+.project
+.clover
+*.iml
+version.properties
+lib/
