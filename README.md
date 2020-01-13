@@ -26,5 +26,5 @@ $ gradle clean build
 ## Run
 Run the following command in the project root folder:
 ```
-$ java -jar build/sales-report-1.0-SNAPSHOT.jar
+$ java -jar build/libs/sales-report-1.0-SNAPSHOT.jar
 ```
