@@ -2,7 +2,7 @@
 /bin/
 /logs/
 /.idea/
-/out/
+/out/*
 
 .DS_Store
 .gradle

@@ -3,7 +3,8 @@ buildscript {
         springBootVersion = '2.2.1.RELEASE'
         junitVersion = '4.12'
         apacheCommonsLang3Version = '3.9'
-        apacheLog4J = '2.6.1'
+        apacheLog4JVersion = '2.6.1'
+        mockitoVersion = '3.2.4'
     }
 
     repositories {
@@ -30,13 +31,13 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter:${springBootVersion}"
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${apacheLog4J}"
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${apacheLog4J}"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: "${apacheLog4JVersion}"
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: "${apacheLog4JVersion}"
     compile "org.apache.commons:commons-lang3:${apacheCommonsLang3Version}"
 
     testCompile "junit:junit:${junitVersion}"
     testCompile group: 'junit', name: 'junit', version: "${junitVersion}"
-    testCompile "org.mockito:mockito-core:3.2.4"
+    testCompile "org.mockito:mockito-core:${mockitoVersion}"
 }
 
 wrapper() {
